@@ -1,5 +1,3 @@
-import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedWriter;
@@ -9,13 +7,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class FlashCardBuilder {
     private JTextArea question;
     private JTextArea answer;
     private ArrayList<FlashCard> cardList;
     private JFrame frame;
-    
+
 
     // Build the user interface
     public FlashCardBuilder() {
@@ -23,38 +22,72 @@ public class FlashCardBuilder {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // PANEL
-        JPanel mainPanel = new JPanel();
+        frame.setBounds(100, 100, 563, 312);
+        frame.setResizable(false);
+		JPanel mainPanel = new JPanel();
+		mainPanel.setBackground(new Color(231, 202, 41));
+		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+
+		frame.setContentPane(mainPanel);
+		mainPanel.setLayout(null);
 
         // FONT
         Font font = new Font("Arial", Font.BOLD, 21);
 
         // QUESTION
         question = new JTextArea(5, 16);
+        question.setBounds(21, 33, 222, 176);
         question.setLineWrap(true);
         question.setWrapStyleWord(true);
         question.setFont(font);
         JScrollPane questionScroll = new JScrollPane(question);
         questionScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         questionScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        mainPanel.add(question);
 
         // ANSWER
         answer = new JTextArea(5, 16);
+        answer.setBounds(295, 33, 222, 176);
         answer.setLineWrap(true);
         answer.setWrapStyleWord(true);
         answer.setFont(font);
         JScrollPane answerScroll = new JScrollPane(answer);
         answerScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         answerScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        mainPanel.add(answer);
 
         JButton nextButton = new JButton("Next Card");
+        nextButton.setForeground(Color.BLACK);
+        nextButton.setFont(new Font("Garamond", Font.PLAIN, 12));
+        nextButton.setBackground(new Color(255, 255, 255));
+        nextButton.setBounds(216, 227, 108, 23);
+        mainPanel.add(nextButton);
 
         cardList = new ArrayList<FlashCard>();
 
+        // Experimental TEXT AREA
+        //JTextArea textArea = new JTextArea();
+		//textArea.setBounds(295, 33, 222, 176);
+		//mainPanel.add(textArea);
+
+		//JTextArea textArea1 = new JTextArea();
+		//textArea1.setBounds(21, 33, 222, 176);
+		//mainPanel.add(textArea1);
+
+
         // LABELS
-        JLabel questionLabel = new JLabel("Question");
-        JLabel answerLabel = new JLabel("Answer");
+        JLabel questionLabel = new JLabel("FRONT");
+		questionLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		questionLabel.setBounds(21, 11, 58, 14);
+		mainPanel.add(questionLabel);
+        JLabel answerLabel = new JLabel("BACK");
+		answerLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		answerLabel.setBounds(295, 11, 58, 14);
+		mainPanel.add(answerLabel);
 
         // MAIN PANEL COMPONENTS
+
         mainPanel.add(questionLabel);
         mainPanel.add(questionScroll);
         mainPanel.add(answerLabel);
@@ -74,7 +107,7 @@ public class FlashCardBuilder {
         fileMenu.add(newMenuItem);
         fileMenu.add(saveMenuItem);
         fileMenu.add(backMenuItem);
-        
+
 
         // ADD EVENTLISTENERS
         newMenuItem.addActionListener(new NewMenuItemListener());
@@ -84,8 +117,7 @@ public class FlashCardBuilder {
         frame.setJMenuBar(MenuBar);
 
         // ADD TO THE FRAME
-        frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
-        frame.setSize(360, 480);
+        frame.setSize(563, 330);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
@@ -133,7 +165,7 @@ public class FlashCardBuilder {
             saveFile(fileSave.getSelectedFile());
         }
 
-        
+
 
     }
 
@@ -146,10 +178,10 @@ public class FlashCardBuilder {
         }
 
 
-        
+
 
     }
-    
+
     private void clearCard() {
         question.setText("");
         answer.setText("");
@@ -157,9 +189,9 @@ public class FlashCardBuilder {
     }
     private void saveFile(File selectedFile) {
         try {
-            
+
             BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile));
-            
+
             Iterator<FlashCard> cardIterator = cardList.iterator();
 
             while (cardIterator.hasNext()) {
@@ -168,12 +200,12 @@ public class FlashCardBuilder {
                 writer.write(card.getAnswer() + "\n");
             }
             writer.close();
-            
-            
+
+
         } catch (Exception e) {
             System.out.println("Couldn't write to file");
             e.printStackTrace();
 
         }
-        }
+     }
 }
